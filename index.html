@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+</head>
+<body>
+  <h2>Enter Phone Number</h2>
+  <form onsubmit="goToChat(); return false;">
+    <input type="text" id="phone" required placeholder="Enter phone number" />
+    <button type="submit">Start Chat</button>
+  </form>
+
+  <script>
+    function goToChat() {
+      const number = document.getElementById("phone").value;
+      window.location.href = "/chat/" + number;
+    }
+  </script>
+</body>
+</html>
