@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat</title>
+</head>
+<body>
+  <h2>Chat - {{ number }}</h2>
+  <div id="chat-box" style="border:1px solid #aaa; height:300px; overflow-y:scroll;"></div>
+  <input type="text" id="msg" placeholder="Type a message" />
+  <button onclick="sendMsg()">Send</button>
+
+  <script>
+    const number = "{{ number }}";
+
+    function loadMessages() {
+      fetch("/get/" + number)
+        .then(res => res.json())
+        .then(data => {
+          let chat = '';
+          data.forEach(m => {
+            chat += `<p><b>${m.time}</b>: ${m.message}</p>`;
+          });
+          document.getElementById("chat-box").innerHTML = chat;
+        });
+    }
+
+    function sendMsg() {
+      const message = document.getElementById("msg").value;
+      fetch("/send", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({number, message})
+      }).then(() => {
+        document.getElementById("msg").value = '';
+        loadMessages();
+      });
+    }
+
+    setInterval(loadMessages, 2000); // auto-refresh every 2 sec
+    loadMessages();
+  </script>
+</body>
+</html>
